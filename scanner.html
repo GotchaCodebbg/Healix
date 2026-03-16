@@ -1,0 +1,530 @@
+<!doctype html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kenko AI | Scanner</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script>tailwind.config = { darkMode: "class" };</script>
+</head>
+<body class="bg-white dark:bg-[#050B1A] transition-colors duration-500 overflow-x-hidden text-slate-800 dark:text-slate-200">
+  <div id="scroll-progress" class="fixed top-0 left-0 h-1 bg-gradient-to-r from-blue-600 to-indigo-400 z-[300] w-0 transition-all duration-100"></div>
+  
+  <nav class="fixed top-0 w-full z-[100] bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl px-8 py-4 border-b border-slate-100 dark:border-slate-800">
+    <div class="max-w-[1400px] mx-auto flex justify-between items-center">
+      <div class="flex items-center space-x-2">
+        <div class="w-9 h-9 border-2 border-blue-600 rounded-lg flex items-center justify-center"><span class="text-blue-600 font-bold">+</span></div>
+        <span class="text-2xl font-extrabold text-[#1E3A8A] dark:text-blue-400 tracking-tighter">Kenko AI</span>
+      </div>
+      <div class="hidden lg:flex items-center space-x-2">
+        <button id="darkModeToggle" class="nav-btn p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-yellow-400">🌙</button>
+        <a href="index.html" class="nav-pill">Home</a>
+        <a href="consultancy.html" class="nav-pill">Consultancy</a>
+        <a href="scanner.html" class="nav-pill active-pill">Scanner</a>
+        <a href="vault.html" class="nav-pill">Vault</a>
+        <a href="dicom.html" class="nav-pill">DICOM</a>
+        <a href="about.html" class="nav-pill">About Us</a>
+        <a href="contact.html" class="nav-pill">Contact Us</a>
+        
+        <!-- User Profile Icon -->
+        <div class="relative ml-4 group">
+          <button id="profileBtn" class="w-10 h-10 rounded-full bg-blue-100 dark:bg-slate-800 flex items-center justify-center text-xl hover:ring-2 hover:ring-blue-600 transition-all">
+            👤
+          </button>
+          <div id="profileDropdown" class="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-800 py-2 hidden group-hover:block z-[110]">
+            <div class="px-4 py-2 border-b dark:border-slate-800">
+              <p class="text-xs font-bold text-slate-400 uppercase">Account</p>
+              <p class="text-sm font-black text-slate-800 dark:text-white truncate">Admin User</p>
+            </div>
+            <a href="profile.html" class="block px-4 py-2 text-sm font-bold text-slate-600 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:text-blue-600 transition-colors">Profile Setup</a>
+            <a href="profile.html#customization" class="block px-4 py-2 text-sm font-bold text-slate-600 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:text-blue-600 transition-colors">Customization</a>
+            <button class="logout-trigger w-full text-left px-4 py-2 text-sm font-bold text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">Sign Out</button>
+          </div>
+        </div>
+      </div>
+      <button id="burgerBtn" class="lg:hidden flex flex-col items-center justify-center w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 space-y-1.5 burger-btn">
+        <span class="burger-line"></span><span class="burger-line"></span><span class="burger-line"></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ========== BURGER / MOBILE MENU PANEL ========== -->
+  <div id="burgerMenu" class="burger-menu">
+    <div class="burger-content">
+      <div class="flex justify-between items-center mb-8">
+        <span class="text-xl font-extrabold text-[#1E3A8A] dark:text-blue-400">Menu</span>
+        <button id="burgerClose" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-lg font-bold">✕</button>
+      </div>
+      <div class="burger-nav-links">
+        <a href="index.html" class="burger-link">🏠 Home</a>
+        <a href="consultancy.html" class="burger-link">🩺 Consultancy</a>
+        <a href="scanner.html" class="burger-link active">📸 Scanner</a>
+        <a href="vault.html" class="burger-link">🔒 Vault</a>
+        <a href="dicom.html" class="burger-link">📡 DICOM</a>
+        <a href="about.html" class="burger-link">ℹ️ About Us</a>
+        <a href="contact.html" class="burger-link">📬 Contact Us</a>
+      </div>
+      <button id="darkModeToggleMobile" class="burger-dark-toggle"><span>🌙</span><span>Toggle Dark Mode</span></button>
+
+      <!-- ====== CONSULTANCY SECTION IN BURGER ====== -->
+      <div class="burger-section-divider"></div>
+      <h3 class="burger-section-title">
+        <span class="burger-section-icon">🩺</span>
+        Consultancy
+      </h3>
+
+      <!-- Quick Book -->
+      <div class="consult-quick-book">
+        <p class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-3">Quick Book a Session</p>
+        <div class="consult-specialties">
+          <button class="consult-specialty-chip" data-spec="general">🩻 General</button>
+          <button class="consult-specialty-chip" data-spec="cardio">❤️ Cardiology</button>
+          <button class="consult-specialty-chip" data-spec="pulmo">🫁 Pulmonology</button>
+          <button class="consult-specialty-chip" data-spec="neuro">🧠 Neurology</button>
+          <button class="consult-specialty-chip" data-spec="ortho">🦴 Orthopedics</button>
+          <button class="consult-specialty-chip" data-spec="derma">🧴 Dermatology</button>
+        </div>
+      </div>
+
+      <!-- Doctor Cards -->
+      <div class="consult-doctors">
+        <div class="consult-doctor-card">
+          <div class="consult-doctor-header">
+            <div class="consult-avatar" style="background: linear-gradient(135deg, #3b82f6, #6366f1);">AS</div>
+            <div class="consult-doctor-info"><h4>Dr. Aditi Sharma</h4><p>General Physician</p></div>
+            <span class="consult-status online">● Online</span>
+          </div>
+          <div class="consult-doctor-meta"><span>⭐ 4.9</span><span>💰 ₹300</span></div>
+          <div class="consult-doctor-actions">
+            <button class="consult-btn-video">📹 Video Call</button>
+            <button class="consult-btn-chat">💬 Chat</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="burgerOverlay" class="burger-overlay"></div>
+
+  <!-- SCANNER UI -->
+  <section class="pt-32 pb-16 px-8">
+    <div class="max-w-[1200px] mx-auto">
+      <div class="text-center mb-10">
+        <div class="page-hero-badge">📸 AI-Powered Document Intelligence</div>
+        <h1 class="text-4xl lg:text-5xl font-black text-[#0B1528] dark:text-white mb-4">Scan. Digitize. <span class="text-blue-600">Understand.</span></h1>
+        <p class="text-slate-500 dark:text-slate-400 max-w-2xl mx-auto">Upload or capture your medical documents to extract data and store them in your secure vault.</p>
+      </div>
+
+      <div class="grid lg:grid-cols-2 gap-8 items-start">
+        <!-- Input Column -->
+        <div class="space-y-6">
+          <!-- Mode Toggle -->
+          <div class="bg-slate-100 dark:bg-slate-800 p-1.5 rounded-2xl flex gap-1">
+            <button id="uploadModeBtn" class="flex-1 py-3 rounded-xl font-bold transition-all bg-white dark:bg-blue-600 text-blue-600 dark:text-white shadow-sm">📁 File Upload</button>
+            <button id="cameraModeBtn" class="flex-1 py-3 rounded-xl font-bold transition-all text-slate-500 hover:bg-white/50 dark:hover:bg-slate-700/50">📷 Camera Capture</button>
+          </div>
+
+          <!-- Upload UI -->
+          <div id="uploadContainer" class="drop-zone relative bg-slate-50 dark:bg-[#080E1C] rounded-[2rem] p-12 text-center">
+            <input type="file" id="fileInput" class="hidden" accept="image/*,application/pdf" />
+            <div class="text-6xl mb-4">📄</div>
+            <h3 class="font-black text-xl mb-2">Drag & Drop Documents</h3>
+            <p class="text-sm text-slate-500 mb-6">Supports JPG, PNG, PDF (up to 50MB)</p>
+            <button id="browseBtn" class="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold hover:scale-105 transition-transform">Browse Files</button>
+          </div>
+
+          <!-- Camera UI (Hidden by default) -->
+          <div id="cameraContainer" class="hidden space-y-4">
+            <div id="cameraViewfinder">
+              <video id="video" autoplay playsinline></video>
+              <div class="camera-overlay"></div>
+            </div>
+            <div class="flex justify-center gap-4">
+              <button id="shutterBtn" class="w-16 h-16 bg-white border-8 border-blue-600 rounded-full hover:scale-110 transition-transform"></button>
+            </div>
+            <p class="text-center text-xs text-slate-500">Position the document within the frame and capture</p>
+          </div>
+
+          <!-- Preview & Progress (Hidden until file selected/captured) -->
+          <div id="processingUI" class="hidden bg-white dark:bg-slate-800 rounded-[2rem] border border-slate-200 dark:border-slate-700 p-8">
+            <div class="flex items-center gap-4 mb-6">
+              <div id="imagePreview" class="w-24 h-24 bg-slate-100 rounded-xl overflow-hidden border border-slate-200">
+                <img id="previewImg" class="w-full h-full object-cover" />
+              </div>
+              <div class="flex-1">
+                <h4 id="statusText" class="font-black text-lg mb-1">Processing Document...</h4>
+                <div class="scan-progress-bar mb-2">
+                  <div id="scanProgressBar" class="scan-progress-fill" style="width: 0%"></div>
+                </div>
+                <p id="progressPercent" class="text-xs text-slate-500 font-bold">Initializing AI Engine...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Verification/Results Column -->
+        <div id="resultsUI" class="hidden space-y-6">
+          <div class="bg-slate-50 dark:bg-[#080E1C] rounded-[2rem] border border-slate-200 dark:border-slate-800 p-8 lg:p-10">
+            <h2 class="text-2xl font-black text-[#0B1528] dark:text-white mb-6 flex items-center gap-2">
+              <span class="text-blue-600">✓</span> Verify Extracted Data
+            </h2>
+            
+            <form id="verifyForm" class="space-y-4">
+              <div class="grid sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="text-xs font-bold text-slate-400 uppercase tracking-widest block mb-1.5 ml-1">Document Type</label>
+                  <select id="docType" class="verification-field font-bold">
+                    <option value="prescription">Prescription</option>
+                    <option value="lab-report">Lab Report</option>
+                    <option value="other">Other Document</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="text-xs font-bold text-slate-400 uppercase tracking-widest block mb-1.5 ml-1">Date</label>
+                  <input type="text" id="docDate" class="verification-field font-bold" placeholder="DD/MM/YYYY" />
+                </div>
+              </div>
+
+              <div>
+                <label class="text-xs font-bold text-slate-400 uppercase tracking-widest block mb-1.5 ml-1">Doctor / Entity</label>
+                <input type="text" id="docDoctor" class="verification-field font-bold" placeholder="Dr. Name or Facility" />
+              </div>
+
+              <!-- Dynamic Section for Medications -->
+              <div id="medicationSection">
+                <label class="text-xs font-bold text-slate-400 uppercase tracking-widest block mb-1.5 ml-1">Medications Detected</label>
+                <div id="medList" class="space-y-2">
+                  <!-- JS will inject medications here -->
+                </div>
+                <button type="button" id="addMedBtn" class="mt-2 text-blue-600 text-xs font-bold hover:underline">+ Add Medication</button>
+              </div>
+
+              <!-- Dynamic Section for Vitals/Labs -->
+              <div id="labsSection">
+                <label class="text-xs font-bold text-slate-400 uppercase tracking-widest block mb-1.5 ml-1">Key Readings (BP, Glucose, etc.)</label>
+                <div id="labList" class="space-y-2">
+                  <!-- JS will inject readings here -->
+                </div>
+                <button type="button" id="addLabBtn" class="mt-2 text-blue-600 text-xs font-bold hover:underline">+ Add Reading</button>
+              </div>
+
+              <div class="pt-4">
+                <button type="submit" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black text-lg shadow-xl shadow-blue-500/20 hover:-translate-y-1 transition-all">Save to Vault →</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="bg-blue-50 dark:bg-blue-900/10 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50">
+            <h4 class="font-bold text-blue-600 text-sm mb-2 flex items-center gap-2">💡 AI Assistant Tip</h4>
+            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">Our AI has extracted this data automatically. Please double-check for any spelling errors or incorrect dosages before saving. High accuracy is crucial for your health history.</p>
+          </div>
+        </div>
+
+        <!-- Placeholder when no result -->
+        <div id="noResultsPlaceholder" class="bg-slate-50 dark:bg-[#080E1C] rounded-[2rem] border-2 border-dashed border-slate-200 dark:border-slate-800 p-20 text-center flex flex-col items-center justify-center">
+          <div class="text-5xl opacity-20 mb-4">⌛</div>
+          <h3 class="font-bold text-slate-400">Waiting for Document...</h3>
+          <p class="text-xs text-slate-400 mt-2 max-w-xs">Once you upload or capture a photo, the AI analysis will appear here for verification.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HIDDEN CANVAS FOR CAPTURE -->
+  <canvas id="canvas" class="hidden"></canvas>
+
+  <!-- FOOTER -->
+  <footer class="bg-[#0B1528] py-12 px-8 text-white">
+    <div class="max-w-[1200px] mx-auto text-center pt-6 border-t border-slate-800">
+      <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">© 2026 Kenko AI — All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  <script src="med-info.js"></script>
+  <script src="ocr-engine.js"></script>
+  <script src="vault.js"></script>
+  <script src="script.js"></script>
+
+  <script>
+    // Scanner Logic
+    const uploadModeBtn = document.getElementById('uploadModeBtn');
+    const cameraModeBtn = document.getElementById('cameraModeBtn');
+    const uploadContainer = document.getElementById('uploadContainer');
+    const cameraContainer = document.getElementById('cameraContainer');
+    const fileInput = document.getElementById('fileInput');
+    const browseBtn = document.getElementById('browseBtn');
+    const video = document.getElementById('video');
+    const shutterBtn = document.getElementById('shutterBtn');
+    const processingUI = document.getElementById('processingUI');
+    const resultsUI = document.getElementById('resultsUI');
+    const noResultsPlaceholder = document.getElementById('noResultsPlaceholder');
+    const previewImg = document.getElementById('previewImg');
+    const scanProgressBar = document.getElementById('scanProgressBar');
+    const progressPercent = document.getElementById('progressPercent');
+    const statusText = document.getElementById('statusText');
+    const verifyForm = document.getElementById('verifyForm');
+
+    let stream = null;
+
+    // Mode Switching
+    uploadModeBtn.addEventListener('click', () => {
+        uploadModeBtn.className = 'flex-1 py-3 rounded-xl font-bold transition-all bg-white dark:bg-blue-600 text-blue-600 dark:text-white shadow-sm';
+        cameraModeBtn.className = 'flex-1 py-3 rounded-xl font-bold transition-all text-slate-500 hover:bg-white/50 dark:hover:bg-slate-700/50';
+        uploadContainer.classList.remove('hidden');
+        cameraContainer.classList.add('hidden');
+        stopCamera();
+    });
+
+    cameraModeBtn.addEventListener('click', () => {
+        cameraModeBtn.className = 'flex-1 py-3 rounded-xl font-bold transition-all bg-white dark:bg-blue-600 text-blue-600 dark:text-white shadow-sm';
+        uploadModeBtn.className = 'flex-1 py-3 rounded-xl font-bold transition-all text-slate-500 hover:bg-white/50 dark:hover:bg-slate-700/50';
+        cameraContainer.classList.remove('hidden');
+        uploadContainer.classList.add('hidden');
+        startCamera();
+    });
+
+    // Camera Logic
+    async function startCamera() {
+        try {
+            stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+            video.srcObject = stream;
+        } catch (err) {
+            alert('Camera access denied or not available.');
+            console.error(err);
+        }
+    }
+
+    function stopCamera() {
+        if (stream) {
+            stream.getTracks().forEach(track => track.stop());
+            stream = null;
+        }
+    }
+
+    shutterBtn.addEventListener('click', () => {
+        const canvas = document.getElementById('canvas');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        canvas.getContext('2d').drawImage(video, 0, 0);
+        const dataUrl = canvas.toDataURL('image/jpeg');
+        processDocument(dataUrl);
+    });
+
+    // File Upload Logic
+    browseBtn.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length) handleFile(e.target.files[0]);
+    });
+
+    // Drag and Drop
+    uploadContainer.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadContainer.classList.add('active');
+    });
+    uploadContainer.addEventListener('dragleave', () => uploadContainer.classList.remove('active'));
+    uploadContainer.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadContainer.classList.remove('active');
+        if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+    });
+
+    function handleFile(file) {
+        if (file.size > 50 * 1024 * 1024) {
+            alert('File too large. Max 50MB.');
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = (e) => processDocument(e.target.result);
+        reader.readAsDataURL(file);
+    }
+
+    // OCR Processing Flow
+    async function processDocument(imageData) {
+        // Show Processing UI
+        processingUI.classList.remove('hidden');
+        previewImg.src = imageData;
+        statusText.innerText = "Initializing AI Engine...";
+        scanProgressBar.style.width = '10%';
+        progressPercent.innerText = '10%';
+        
+        resultsUI.classList.add('hidden');
+        noResultsPlaceholder.classList.remove('hidden');
+
+        try {
+            // Step 1: Initialize OCR and process
+            // We use a simplified progress simulation for better UX during worker load
+            let progress = 10;
+            const progressTimer = setInterval(() => {
+                if (progress < 80) {
+                    progress += 2;
+                    scanProgressBar.style.width = `${progress}%`;
+                    progressPercent.innerText = `${progress}%`;
+                }
+            }, 200);
+
+            statusText.innerText = "Analyzing Text & Patterns...";
+            const rawText = await OCREngine.scanImage(imageData);
+            const parsedData = OCREngine.parseMedicalData(rawText);
+            
+            clearInterval(progressTimer);
+            scanProgressBar.style.width = '100%';
+            progressPercent.innerText = '100%';
+            statusText.innerText = "Scan Complete!";
+
+            // Step 2: Populate Form
+            setTimeout(() => {
+                populateVerificationForm(parsedData, imageData);
+                processingUI.classList.add('hidden');
+                noResultsPlaceholder.classList.add('hidden');
+                resultsUI.classList.remove('hidden');
+            }, 500);
+
+        } catch (err) {
+            console.error(err);
+            statusText.innerText = "Error Processing Document";
+            statusText.classList.add('text-red-600');
+        }
+    }
+
+    function populateVerificationForm(data, imageData) {
+        document.getElementById('docDate').value = data.date || '';
+        document.getElementById('docDoctor').value = data.doctor || '';
+        
+        // Populate med list
+        const medList = document.getElementById('medList');
+        medList.innerHTML = '';
+        data.medications.forEach(med => addField(medList, med));
+        if (data.medications.length === 0) addField(medList, '');
+
+        // Populate lab list
+        const labList = document.getElementById('labList');
+        labList.innerHTML = '';
+        if (data.vitals.bp) addField(labList, `BP: ${data.vitals.bp}`);
+        if (data.vitals.heartRate) addField(labList, `Heart Rate: ${data.vitals.heartRate}`);
+        data.labResults.forEach(res => addField(labList, `${res.name}: ${res.value}`));
+        if (labList.children.length === 0) addField(labList, '');
+
+        // Store the image data in the form for submission
+        verifyForm.dataset.image = imageData;
+    }
+
+    function addField(container, value) {
+        const div = document.createElement('div');
+        div.className = 'flex flex-col gap-2 mb-3 bg-white dark:bg-slate-800 p-3 rounded-xl border border-slate-100 dark:border-slate-700';
+        
+        // Find medicine info
+        const info = getMedicineInfo(value);
+        let infoHtml = '';
+        if (info) {
+           infoHtml = `
+            <div class="mt-2 text-[10px] bg-blue-50 dark:bg-blue-900/20 p-2 rounded-lg border border-blue-100 dark:border-blue-800/50">
+                <p class="text-blue-600 dark:text-blue-400 font-black uppercase mb-1">ℹ️ Drug Information</p>
+                <p class="text-slate-600 dark:text-slate-400 mb-1"><b>Description:</b> ${info.description}</p>
+                <p class="text-red-600 dark:text-red-400"><b>Side Effects:</b> ${info.sideEffects}</p>
+            </div>
+           `;
+        }
+
+        div.innerHTML = `
+            <div class="flex gap-2">
+                <input type="text" class="verification-field flex-1" value="${value}" oninput="updateMedInfo(this)" />
+                <button type="button" class="px-3 text-red-500 font-bold" onclick="this.parentElement.parentElement.remove()">✕</button>
+            </div>
+            ${infoHtml}
+        `;
+        container.appendChild(div);
+    }
+
+    // Live update medicine info as user types
+    window.updateMedInfo = function(input) {
+        const info = getMedicineInfo(input.value);
+        const container = input.parentElement.parentElement;
+        let infoDiv = container.querySelector('.drug-info-panel');
+        
+        if (info) {
+            if (!infoDiv) {
+                infoDiv = document.createElement('div');
+                infoDiv.className = 'drug-info-panel mt-2 text-[10px] bg-blue-50 dark:bg-blue-900/20 p-2 rounded-lg border border-blue-100 dark:border-blue-800/50';
+                container.appendChild(infoDiv);
+            }
+            infoDiv.innerHTML = `
+                <p class="text-blue-600 dark:text-blue-400 font-black uppercase mb-1">ℹ️ Drug Information</p>
+                <p class="text-slate-600 dark:text-slate-400 mb-1"><b>Description:</b> ${info.description}</p>
+                <p class="text-red-600 dark:text-red-400"><b>Side Effects:</b> ${info.sideEffects}</p>
+            `;
+        } else if (infoDiv) {
+            infoDiv.remove();
+        }
+    };
+
+    document.getElementById('addMedBtn').addEventListener('click', () => addField(document.getElementById('medList'), ''));
+    document.getElementById('addLabBtn').addEventListener('click', () => addField(document.getElementById('labList'), ''));
+
+    // Save to Vault
+    verifyForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const medications = Array.from(document.getElementById('medList').querySelectorAll('input')).map(i => i.value).filter(v => v);
+        const labResults = Array.from(document.getElementById('labList').querySelectorAll('input')).map(i => i.value).filter(v => v);
+
+        // Compress image before saving to avoid IndexedDB quota limits
+        let finalImage = verifyForm.dataset.image;
+        try {
+            finalImage = await compressImage(finalImage, 800, 0.7);
+        } catch (err) {
+            console.warn('Compression failed, using original', err);
+        }
+
+        const record = {
+            type: document.getElementById('docType').value,
+            date: document.getElementById('docDate').value,
+            doctor: document.getElementById('docDoctor').value,
+            medications: medications,
+            labResults: labResults,
+            image: finalImage
+        };
+
+        try {
+            await Vault.saveRecord(record);
+            alert('Success! Record saved to your secure vault.');
+            window.location.href = 'vault.html';
+        } catch (err) {
+            console.error(err);
+            alert('Error saving to vault: ' + err.message);
+        }
+    });
+
+    /**
+     * Helper to compress images to avoid storage limits
+     */
+    function compressImage(base64, maxSide, quality) {
+        return new Promise((resolve) => {
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                let width = img.width;
+                let height = img.height;
+                if (width > height) {
+                    if (width > maxSide) { height *= maxSide / width; width = maxSide; }
+                } else {
+                    if (height > maxSide) { width *= maxSide / height; height = maxSide; }
+                }
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+                resolve(canvas.toDataURL('image/jpeg', quality));
+            };
+            img.src = base64;
+        });
+    }
+
+  </script>
+  <!-- Botpress Chatbot -->
+  <script src="https://cdn.botpress.cloud/webchat/v3.6/inject.js"></script>
+  <script src="https://files.bpcontent.cloud/2026/03/16/16/20260316164228-X4HS505R.js" defer></script>
+</body>
+</html>

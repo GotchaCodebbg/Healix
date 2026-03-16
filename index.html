@@ -1,0 +1,858 @@
+<!doctype html>
+<html lang="en" class="light">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kenko AI | The Future of Health</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script>
+    tailwind.config = { darkMode: "class" };
+    // Immediate Auth Check to prevent splash
+    (function() {
+      const auth = localStorage.getItem('kenko_auth');
+      window.initialAuth = auth === 'true';
+    })();
+  </script>
+</head>
+
+<body
+  class="bg-white dark:bg-[#050B1A] transition-colors duration-500 overflow-x-hidden text-slate-800 dark:text-slate-200">
+  <!-- Scroll Progress -->
+  <div id="scroll-progress"
+    class="fixed top-0 left-0 h-1 bg-gradient-to-r from-blue-600 to-indigo-400 z-[300] w-0 transition-all duration-100">
+  </div>
+
+  <!-- ========== LOGIN OVERLAY (outside nav, full-page) ========== -->
+  <div id="loginOverlay" class="login-overlay" style="display: none;">
+    <div class="login-card">
+      <div class="login-logo">
+        <div class="login-logo-icon">+</div>
+        <span>Kenko AI</span>
+      </div>
+      <h2 class="login-title">Welcome Back</h2>
+      <p class="login-subtitle">Sign in to access your health dashboard</p>
+      <form id="loginForm" class="login-form">
+        <div class="login-field">
+          <label for="email">Email address</label>
+          <input type="email" id="email" placeholder="admin@kenkoai.com" required />
+        </div>
+        <div class="login-field">
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="••••••••" required />
+        </div>
+        <button type="submit" class="login-submit">Sign In →</button>
+      </form>
+      <p id="loginError"
+        class="hidden text-red-500 text-sm font-bold bg-red-50 dark:bg-red-900/20 p-3 rounded-xl border border-red-100 dark:border-red-800/50 mt-4 text-center">
+        Invalid credentials. Use admin@kenkoai.com / kenko2026</p>
+      <p class="text-[10px] text-slate-400 text-center font-bold uppercase tracking-widest mt-4">Demo: admin@kenkoai.com
+        / kenko2026</p>
+      <p class="login-footer-text">Don't have an account? <a href="#">Create one</a></p>
+    </div>
+  </div>
+
+  <!-- ========== MAIN CONTENT (hidden until login) ========== -->
+  <div id="mainContent" class="hidden">
+
+    <!-- ========== NAV ========== -->
+    <nav
+      class="fixed top-0 w-full z-[100] bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl px-8 py-4 border-b border-slate-100 dark:border-slate-800">
+      <div class="max-w-[1400px] mx-auto flex justify-between items-center">
+        <div class="flex items-center space-x-2">
+          <div class="w-9 h-9 border-2 border-blue-600 rounded-lg flex items-center justify-center">
+            <span class="text-blue-600 font-bold">+</span>
+          </div>
+          <span class="text-2xl font-extrabold text-[#1E3A8A] dark:text-blue-400 tracking-tighter">Kenko AI</span>
+        </div>
+        <!-- Desktop Nav -->
+        <div class="hidden lg:flex items-center space-x-2">
+          <button id="darkModeToggle"
+            class="nav-btn p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-yellow-400">
+            🌙
+          </button>
+          <a href="index.html" class="nav-pill active-pill">Home</a>
+          <a href="consultancy.html" class="nav-pill">Consultancy</a>
+          <a href="scanner.html" class="nav-pill">Scanner</a>
+          <a href="vault.html" class="nav-pill">Vault</a>
+          <a href="dicom.html" class="nav-pill">DICOM</a>
+          <a href="about.html" class="nav-pill">About Us</a>
+          <a href="contact.html" class="nav-pill">Contact Us</a>
+          
+          <!-- User Profile Icon -->
+          <div class="relative ml-4 group">
+            <button id="profileBtn" class="w-10 h-10 rounded-full bg-blue-100 dark:bg-slate-800 flex items-center justify-center text-xl hover:ring-2 hover:ring-blue-600 transition-all">
+              👤
+            </button>
+            <div id="profileDropdown" class="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-800 py-2 hidden group-hover:block z-[110]">
+              <div class="px-4 py-2 border-b dark:border-slate-800">
+                <p class="text-xs font-bold text-slate-400 uppercase">Account</p>
+                <p class="text-sm font-black text-slate-800 dark:text-white truncate">Admin User</p>
+              </div>
+              <a href="profile.html" class="block px-4 py-2 text-sm font-bold text-slate-600 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:text-blue-600 transition-colors">Profile Setup</a>
+              <a href="profile.html#customization" class="block px-4 py-2 text-sm font-bold text-slate-600 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:text-blue-600 transition-colors">Customization</a>
+              <button class="logout-trigger w-full text-left px-4 py-2 text-sm font-bold text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">Sign Out</button>
+            </div>
+          </div>
+        </div>
+        <!-- Burger Button (mobile) -->
+        <button id="burgerBtn"
+          class="lg:hidden flex flex-col items-center justify-center w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 space-y-1.5 burger-btn">
+          <span class="burger-line"></span>
+          <span class="burger-line"></span>
+          <span class="burger-line"></span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- ========== BURGER / MOBILE MENU PANEL ========== -->
+    <div id="burgerMenu" class="burger-menu">
+      <div class="burger-menu-inner">
+        <!-- Close -->
+        <div class="flex justify-between items-center mb-8">
+          <span class="text-xl font-extrabold text-[#1E3A8A] dark:text-blue-400">Menu</span>
+          <button id="burgerClose"
+            class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-lg font-bold text-slate-600 dark:text-slate-300">✕</button>
+        </div>
+
+        <!-- Nav Links -->
+        <div class="burger-nav-links">
+          <a href="index.html" class="burger-link active">🏠 Home</a>
+          <a href="consultancy.html" class="burger-link">🩺 Consultancy</a>
+          <a href="scanner.html" class="burger-link">📸 Scanner</a>
+          <a href="vault.html" class="burger-link">🔒 Vault</a>
+          <a href="dicom.html" class="burger-link">📡 DICOM</a>
+          <a href="about.html" class="burger-link">ℹ️ About Us</a>
+          <a href="contact.html" class="burger-link">📬 Contact Us</a>
+        </div>
+
+        <!-- Dark Mode Toggle -->
+        <button id="darkModeToggleMobile" class="burger-dark-toggle">
+          <span>🌙</span>
+          <span>Toggle Dark Mode</span>
+        </button>
+
+        <!-- ====== CONSULTANCY SECTION IN BURGER ====== -->
+        <div class="burger-section-divider"></div>
+        <h3 class="burger-section-title">
+          <span class="burger-section-icon">🩺</span>
+          Consultancy
+        </h3>
+
+        <!-- Quick Book -->
+        <div class="consult-quick-book">
+          <p class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-3">Quick Book a
+            Session</p>
+          <div class="consult-specialties">
+            <button class="consult-specialty-chip" data-spec="general">🩻 General</button>
+            <button class="consult-specialty-chip" data-spec="cardio">❤️ Cardiology</button>
+            <button class="consult-specialty-chip" data-spec="pulmo">🫁 Pulmonology</button>
+            <button class="consult-specialty-chip" data-spec="neuro">🧠 Neurology</button>
+            <button class="consult-specialty-chip" data-spec="ortho">🦴 Orthopedics</button>
+            <button class="consult-specialty-chip" data-spec="derma">🧴 Dermatology</button>
+          </div>
+        </div>
+
+        <!-- Doctor Cards -->
+        <div class="consult-doctors">
+          <!-- Doctor 1 -->
+          <div class="consult-doctor-card">
+            <div class="consult-doctor-header">
+              <div class="consult-avatar" style="background: linear-gradient(135deg, #3b82f6, #6366f1);">AS</div>
+              <div class="consult-doctor-info">
+                <h4>Dr. Aditi Sharma</h4>
+                <p>General Physician</p>
+              </div>
+              <span class="consult-status online">● Online</span>
+            </div>
+            <div class="consult-doctor-meta">
+              <span>⭐ 4.9</span>
+              <span>🕐 10am–6pm</span>
+              <span>💰 ₹300</span>
+            </div>
+            <div class="consult-doctor-tags">
+              <span>Fever</span><span>Infections</span><span>Checkup</span>
+            </div>
+            <div class="consult-doctor-actions">
+              <button class="consult-btn-video">📹 Video Call</button>
+              <button class="consult-btn-chat">💬 Chat</button>
+            </div>
+          </div>
+
+          <!-- Doctor 2 -->
+          <div class="consult-doctor-card">
+            <div class="consult-doctor-header">
+              <div class="consult-avatar" style="background: linear-gradient(135deg, #ef4444, #f97316);">RM</div>
+              <div class="consult-doctor-info">
+                <h4>Dr. Rahul Mehra</h4>
+                <p>Pulmonologist</p>
+              </div>
+              <span class="consult-status online">● Online</span>
+            </div>
+            <div class="consult-doctor-meta">
+              <span>⭐ 4.8</span>
+              <span>🕐 2pm–8pm</span>
+              <span>💰 ₹500</span>
+            </div>
+            <div class="consult-doctor-tags">
+              <span>Asthma</span><span>COPD</span><span>Breathing</span>
+            </div>
+            <div class="consult-doctor-actions">
+              <button class="consult-btn-video">📹 Video Call</button>
+              <button class="consult-btn-chat">💬 Chat</button>
+            </div>
+          </div>
+
+          <!-- Doctor 3 -->
+          <div class="consult-doctor-card">
+            <div class="consult-doctor-header">
+              <div class="consult-avatar" style="background: linear-gradient(135deg, #10b981, #14b8a6);">PK</div>
+              <div class="consult-doctor-info">
+                <h4>Dr. Priya Kapoor</h4>
+                <p>Cardiologist</p>
+              </div>
+              <span class="consult-status busy">● Busy</span>
+            </div>
+            <div class="consult-doctor-meta">
+              <span>⭐ 4.9</span>
+              <span>🕐 9am–3pm</span>
+              <span>💰 ₹700</span>
+            </div>
+            <div class="consult-doctor-tags">
+              <span>Heart</span><span>BP</span><span>ECG</span>
+            </div>
+            <div class="consult-doctor-actions">
+              <button class="consult-btn-video">📹 Video Call</button>
+              <button class="consult-btn-chat">💬 Chat</button>
+            </div>
+          </div>
+
+          <!-- Doctor 4 -->
+          <div class="consult-doctor-card">
+            <div class="consult-doctor-header">
+              <div class="consult-avatar" style="background: linear-gradient(135deg, #8b5cf6, #a855f7);">VR</div>
+              <div class="consult-doctor-info">
+                <h4>Dr. Vikram Rao</h4>
+                <p>Neurologist</p>
+              </div>
+              <span class="consult-status offline">● Offline</span>
+            </div>
+            <div class="consult-doctor-meta">
+              <span>⭐ 4.7</span>
+              <span>🕐 11am–5pm</span>
+              <span>💰 ₹600</span>
+            </div>
+            <div class="consult-doctor-tags">
+              <span>Migraine</span><span>Nerve</span><span>Brain</span>
+            </div>
+            <div class="consult-doctor-actions">
+              <button class="consult-btn-video" disabled>📹 Unavailable</button>
+              <button class="consult-btn-chat" disabled>💬 Offline</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Upcoming Appointments -->
+        <div class="consult-appointments">
+          <p class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-3">Your Appointments
+          </p>
+          <div class="consult-appt-card">
+            <div class="consult-appt-date">
+              <span class="consult-appt-day">17</span>
+              <span class="consult-appt-month">MAR</span>
+            </div>
+            <div class="consult-appt-info">
+              <h5>Dr. Aditi Sharma</h5>
+              <p>General Checkup · 10:30 AM</p>
+            </div>
+            <button class="consult-appt-join">Join</button>
+          </div>
+          <div class="consult-appt-card">
+            <div class="consult-appt-date">
+              <span class="consult-appt-day">20</span>
+              <span class="consult-appt-month">MAR</span>
+            </div>
+            <div class="consult-appt-info">
+              <h5>Dr. Rahul Mehra</h5>
+              <p>Follow-up · 3:00 PM</p>
+            </div>
+            <button class="consult-appt-join upcoming">Upcoming</button>
+          </div>
+        </div>
+
+        <!-- CTA -->
+        <button class="burger-cta">Start Smart Diagnosis →</button>
+      </div>
+    </div>
+    <!-- Burger Overlay -->
+    <div id="burgerOverlay" class="burger-overlay"></div>
+
+    <!-- ========== HERO ========== -->
+    <header id="hero"
+      class="relative pt-48 pb-24 px-8 grid-bg min-h-screen z-10 flex flex-col justify-center items-center text-center">
+      <div class="max-w-[1000px] mx-auto space-y-8 relative z-20">
+        <div
+          class="inline-flex items-center space-x-2 bg-blue-50 dark:bg-blue-900/30 px-4 py-2 rounded-full border border-blue-100 dark:border-blue-800 animate-fade-in-up">
+          <span class="flex h-2 w-2 rounded-full bg-blue-600 animate-ping"></span>
+          <span class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-widest">Emergency
+            Intelligence Engine</span>
+        </div>
+        <h1
+          class="text-6xl lg:text-8xl font-black text-[#0B1528] dark:text-white leading-[1.1] tracking-tight animate-fade-in-up"
+          style="animation-delay: 0.1s">
+          AI-Powered First Response <br />
+          <span class="text-blue-600">Health Companion</span>
+        </h1>
+        <p class="text-xl text-slate-500 dark:text-slate-400 max-w-2xl mx-auto font-medium leading-relaxed animate-fade-in-up"
+          style="animation-delay: 0.2s">
+          Kenko AI analyzes symptoms, detects emergencies, suggests the right
+          medical action, and connects users to nearby care - instantly.
+        </p>
+        <div
+          class="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6 animate-fade-in-up"
+          style="animation-delay: 0.3s">
+          <button
+            class="bg-blue-600 text-white px-8 py-4 rounded-xl font-bold shadow-xl shadow-blue-500/30 hover:-translate-y-1 transition-all w-full sm:w-auto">
+            Start Smart Diagnosis →
+          </button>
+          <button
+            class="bg-white dark:bg-slate-800 text-slate-800 dark:text-white border border-slate-200 dark:border-slate-700 px-8 py-4 rounded-xl font-bold hover:bg-slate-50 dark:hover:bg-slate-700 transition-all w-full sm:w-auto">
+            Learn How It Works
+          </button>
+        </div>
+
+        <div class="flex flex-wrap justify-center gap-4 mt-12 pt-8 animate-fade-in-up" style="animation-delay: 0.4s">
+          <div
+            class="flex items-center px-4 py-2 bg-white dark:bg-slate-800 rounded-full shadow-sm border border-slate-100 dark:border-slate-700 text-sm font-bold">
+            <span class="text-blue-600 mr-2">✓</span> Early Risk Detection
+          </div>
+          <div
+            class="flex items-center px-4 py-2 bg-white dark:bg-slate-800 rounded-full shadow-sm border border-slate-100 dark:border-slate-700 text-sm font-bold">
+            <span class="text-blue-600 mr-2">✓</span> Golden Hour Alerts
+          </div>
+          <div
+            class="flex items-center px-4 py-2 bg-white dark:bg-slate-800 rounded-full shadow-sm border border-slate-100 dark:border-slate-700 text-sm font-bold">
+            <span class="text-blue-600 mr-2">✓</span> Doctor Match
+          </div>
+          <div
+            class="flex items-center px-4 py-2 bg-white dark:bg-slate-800 rounded-full shadow-sm border border-slate-100 dark:border-slate-700 text-sm font-bold">
+            <span class="text-blue-600 mr-2">✓</span> ABDM Ready
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ========== WORKFLOW ========== -->
+    <section id="triage" class="py-24 px-8 bg-slate-50 dark:bg-[#080E1C]">
+      <div class="max-w-[1200px] mx-auto text-center scroll-reveal">
+        <h2 class="text-sm font-black text-blue-600 tracking-[0.2em] uppercase mb-16">
+          The Workflow
+        </h2>
+        <div class="flex flex-wrap justify-center gap-8 lg:gap-16">
+          <div class="flex flex-col items-center group">
+            <div
+              class="w-20 h-20 bg-white dark:bg-slate-800 rounded-3xl shadow-lg border border-slate-100 dark:border-slate-700 flex items-center justify-center text-2xl group-hover:scale-110 group-hover:border-blue-500 transition-all mb-4 text-blue-600">
+              📄
+            </div>
+            <p class="text-xs font-black text-slate-400 uppercase">Step 1</p>
+            <p class="font-bold">Enter Symptoms</p>
+          </div>
+          <div class="flex flex-col items-center group">
+            <div
+              class="w-20 h-20 bg-white dark:bg-slate-800 rounded-3xl shadow-lg border border-slate-100 dark:border-slate-700 flex items-center justify-center text-2xl group-hover:scale-110 group-hover:border-blue-500 transition-all mb-4 text-blue-600">
+              ⚡
+            </div>
+            <p class="text-xs font-black text-slate-400 uppercase">Step 2</p>
+            <p class="font-bold">AI Risk Analysis</p>
+          </div>
+          <div class="flex flex-col items-center group">
+            <div
+              class="w-20 h-20 bg-white dark:bg-slate-800 rounded-3xl shadow-lg border border-slate-100 dark:border-slate-700 flex items-center justify-center text-2xl group-hover:scale-110 group-hover:border-blue-500 transition-all mb-4 text-blue-600">
+              📈
+            </div>
+            <p class="text-xs font-black text-slate-400 uppercase">Step 3</p>
+            <p class="font-bold">Severity Check</p>
+          </div>
+          <div class="flex flex-col items-center group">
+            <div
+              class="w-20 h-20 bg-white dark:bg-slate-800 rounded-3xl shadow-lg border border-slate-100 dark:border-slate-700 flex items-center justify-center text-2xl group-hover:scale-110 group-hover:border-blue-500 transition-all mb-4 text-blue-600">
+              👨‍⚕️
+            </div>
+            <p class="text-xs font-black text-slate-400 uppercase">Step 4</p>
+            <p class="font-bold">Doctor Match</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== SMART TRIAGE ========== -->
+    <section class="py-32 px-8 bg-white dark:bg-[#050B1A]">
+      <div class="max-w-[1200px] mx-auto grid lg:grid-cols-2 gap-16 items-center">
+        <div class="order-2 lg:order-1 scroll-reveal parallax-element relative">
+          <div
+            class="bg-white dark:bg-slate-800 rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] dark:shadow-none border border-slate-100 dark:border-slate-700 p-8 w-full max-w-md mx-auto relative z-20">
+            <div class="flex justify-between items-center border-b dark:border-slate-700 pb-4 mb-6">
+              <h3 class="font-black text-lg">Likely Conditions</h3>
+              <span class="text-[10px] font-black text-blue-600 uppercase tracking-widest">STIE Analysis</span>
+            </div>
+
+            <div class="space-y-6">
+              <div>
+                <div class="flex justify-between text-sm mb-2">
+                  <span class="font-bold">Acute Bronchitis
+                    <span class="text-slate-400 font-normal">— Moderate</span></span><span class="font-bold">55%</span>
+                </div>
+                <div class="w-full h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                  <div class="data-bar h-full bg-orange-500 rounded-full" data-width="55%"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between text-sm mb-2">
+                  <span class="font-bold">Pneumonia
+                    <span class="text-slate-400 font-normal">— High Risk</span></span><span class="font-bold">74%</span>
+                </div>
+                <div class="w-full h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                  <div class="data-bar h-full bg-red-600 rounded-full" data-width="74%"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between text-sm mb-2">
+                  <span class="font-bold">Viral Fever
+                    <span class="text-slate-400 font-normal">— Low</span></span><span class="font-bold">20%</span>
+                </div>
+                <div class="w-full h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                  <div class="data-bar h-full bg-blue-600 rounded-full" data-width="20%"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-8 bg-blue-50 dark:bg-slate-900/50 p-4 rounded-xl border-l-4 border-blue-600">
+              <p class="font-black text-sm">Risk Level: 74% — High</p>
+              <p class="text-xs text-slate-500 mt-1">
+                Suggested Action: Refer to Pulmonologist
+              </p>
+            </div>
+          </div>
+          <div
+            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-blue-100/50 dark:bg-blue-900/20 blur-3xl rounded-full z-10">
+          </div>
+        </div>
+
+        <div class="order-1 lg:order-2 space-y-6 scroll-reveal">
+          <h2 class="text-5xl font-black text-[#0B1528] dark:text-white leading-tight">
+            AI-Powered Smart <br />
+            Triage Engine
+          </h2>
+          <p class="text-lg text-slate-500 dark:text-slate-400">
+            Our Smart Triage Intelligence Engine (STIE) evaluates symptoms using
+            structured AI reasoning and medical severity classification.
+          </p>
+          <p class="text-xl font-bold text-blue-600">
+            It doesn't just guess conditions — it prioritizes risk.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== EMERGENCY ========== -->
+    <section class="py-24 px-8 bg-slate-50 dark:bg-[#080E1C]">
+      <div
+        class="max-w-[1200px] mx-auto bg-white dark:bg-slate-900 rounded-[3rem] shadow-xl border border-red-50 dark:border-slate-800 overflow-hidden relative scroll-reveal">
+        <div
+          class="absolute right-0 top-0 w-1/2 h-full bg-gradient-to-l from-red-50/50 dark:from-red-900/10 to-transparent pointer-events-none">
+        </div>
+
+        <div class="grid lg:grid-cols-2 p-12 lg:p-20 gap-12 items-center relative z-10">
+          <div class="space-y-6">
+            <h2 class="text-4xl font-black text-[#0B1528] dark:text-white">
+              Golden Hour Emergency Detection
+            </h2>
+            <p class="text-slate-500 dark:text-slate-400 text-lg">
+              Kenko AI identifies stroke, cardiac events, severe infections, and
+              other time-sensitive conditions instantly.
+            </p>
+            <ul class="space-y-4 mt-8">
+              <li class="flex items-center text-sm font-bold">
+                <span class="w-2 h-2 rounded-full bg-red-500 mr-4 shadow-[0_0_10px_rgba(239,68,68,0.8)]"></span>
+                Triggers Emergency Alert
+              </li>
+              <li class="flex items-center text-sm font-bold">
+                <span class="w-2 h-2 rounded-full bg-red-500 mr-4 shadow-[0_0_10px_rgba(239,68,68,0.8)]"></span>
+                Displays Nearest Hospitals
+              </li>
+              <li class="flex items-center text-sm font-bold">
+                <span class="w-2 h-2 rounded-full bg-red-500 mr-4 shadow-[0_0_10px_rgba(239,68,68,0.8)]"></span>
+                Recommends Immediate Action
+              </li>
+            </ul>
+          </div>
+
+          <div
+            class="bg-white dark:bg-slate-800 rounded-3xl p-8 shadow-[0_20px_50px_rgba(239,68,68,0.15)] border border-red-100 dark:border-red-900/50 transform hover:scale-[1.02] transition-transform">
+            <div class="flex items-center text-red-500 font-black tracking-widest uppercase text-sm mb-6">
+              <span class="text-xl mr-2 animate-pulse">⚠️</span> CRITICAL ALERT
+            </div>
+            <h4 class="text-2xl font-black mb-6">Cardiac Pattern Detected</h4>
+            <button
+              class="w-full bg-[#E60000] hover:bg-red-700 text-white font-bold py-4 rounded-xl flex items-center justify-center space-x-2 transition-colors mb-4">
+              <span>📞</span> <span>Call +1 618 360 7978</span>
+            </button>
+            <button
+              class="w-full bg-white dark:bg-slate-900 text-slate-800 dark:text-white border border-slate-200 dark:border-slate-700 font-bold py-4 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+              Find Nearest Hospital/Clinic
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== WHY KENKO ========== -->
+    <section id="about" class="py-32 px-8 bg-white dark:bg-[#050B1A]">
+      <div class="max-w-[1200px] mx-auto text-center mb-16 scroll-reveal">
+        <h2 class="text-4xl font-black text-[#0B1528] dark:text-white mb-4">
+          Why Kenko is Different
+        </h2>
+        <p class="text-slate-500 font-medium max-w-2xl mx-auto">
+          While traditional health apps focus on appointments, Kenko reimagines
+          healthcare data with AI, global connectivity, and patient empowerment.
+        </p>
+      </div>
+
+      <div class="max-w-[1200px] mx-auto grid md:grid-cols-3 gap-8">
+        <div class="scroll-reveal glass-card p-10 text-center hover:-translate-y-2 transition-transform duration-300">
+          <div
+            class="w-16 h-16 mx-auto bg-blue-50 dark:bg-slate-800 rounded-full flex items-center justify-center text-blue-500 text-2xl mb-6">
+            🤖
+          </div>
+          <h3 class="font-black text-xl mb-3">Patient-First AI</h3>
+          <p class="text-sm text-slate-500">
+            Advanced AI that works for you, not healthcare systems. Get
+            personalized insights instantly.
+          </p>
+        </div>
+        <div
+          class="scroll-reveal glass-card p-10 text-center hover:-translate-y-2 transition-transform duration-300 relative overflow-hidden">
+          <div
+            class="absolute inset-0 bg-gradient-to-b from-blue-50/50 to-transparent dark:from-blue-900/10 pointer-events-none">
+          </div>
+          <div
+            class="w-16 h-16 mx-auto bg-blue-50 dark:bg-slate-800 rounded-full flex items-center justify-center text-blue-500 text-2xl mb-6 relative z-10">
+            🛡️
+          </div>
+          <h3 class="font-black text-xl mb-3 relative z-10">ABDM-Ready</h3>
+          <p class="text-sm text-slate-500 relative z-10">
+            Built for India's digital health ecosystem. Seamlessly integrate
+            with government initiatives.
+          </p>
+        </div>
+        <div class="scroll-reveal glass-card p-10 text-center hover:-translate-y-2 transition-transform duration-300">
+          <div
+            class="w-16 h-16 mx-auto bg-blue-50 dark:bg-slate-800 rounded-full flex items-center justify-center text-blue-500 text-2xl mb-6">
+            🌍
+          </div>
+          <h3 class="font-black text-xl mb-3">Global Network</h3>
+          <p class="text-sm text-slate-500">
+            Access specialists worldwide. Break down geographical barriers to
+            quality healthcare.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== FEATURES ========== -->
+    <section id="vault" class="py-24 px-8 bg-slate-50 dark:bg-[#080E1C]">
+      <div class="max-w-[1400px] mx-auto grid lg:grid-cols-3 gap-8">
+        <div
+          class="scroll-reveal glow-card bg-[#eef6ff] dark:bg-slate-900/50 p-12 rounded-[3rem] border border-blue-50 dark:border-slate-800 h-full flex flex-col">
+          <div class="text-4xl mb-8">📡</div>
+          <h3 class="text-2xl font-black text-[#1E3A8A] dark:text-white mb-4">
+            DICOM Sharing
+          </h3>
+          <p class="text-slate-500 dark:text-slate-400 mb-10 leading-relaxed">
+            High-speed radiology image sharing with zero loss in resolution.
+          </p>
+          <div
+            class="mt-auto pt-6 border-t dark:border-slate-800 text-blue-600 font-bold cursor-pointer hover:translate-x-2 transition-transform inline-block w-max">
+            Explore Feature →
+          </div>
+        </div>
+        <div
+          class="scroll-reveal glow-card bg-[#eef6ff] dark:bg-slate-900/50 p-12 rounded-[3rem] border border-blue-50 dark:border-slate-800 h-full flex flex-col">
+          <div class="text-4xl mb-8">📸</div>
+          <h3 class="text-2xl font-black text-[#1E3A8A] dark:text-white mb-4">
+            AI Scanner
+          </h3>
+          <p class="text-slate-500 dark:text-slate-400 mb-10 leading-relaxed">
+            Convert physical prescriptions into digital, searchable data
+            instantly.
+          </p>
+          <div
+            class="mt-auto pt-6 border-t dark:border-slate-800 text-blue-600 font-bold cursor-pointer hover:translate-x-2 transition-transform inline-block w-max">
+            Open Scanner →
+          </div>
+        </div>
+        <div
+          class="scroll-reveal glow-card bg-[#eef6ff] dark:bg-slate-900/50 p-12 rounded-[3rem] border border-blue-50 dark:border-slate-800 h-full flex flex-col">
+          <div class="text-4xl mb-8">🔒</div>
+          <h3 class="text-2xl font-black text-[#1E3A8A] dark:text-white mb-4">
+            Secure Vault
+          </h3>
+          <p class="text-slate-500 dark:text-slate-400 mb-10 leading-relaxed">
+            End-to-end encrypted storage for all your medical records in one
+            place.
+          </p>
+          <div
+            class="mt-auto pt-6 border-t dark:border-slate-800 text-blue-600 font-bold cursor-pointer hover:translate-x-2 transition-transform inline-block w-max">
+            View Vault →
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== CTA ========== -->
+    <section class="bg-[#2A43D4] py-32 px-8 text-center scroll-reveal relative overflow-hidden">
+      <div class="absolute top-0 right-0 w-96 h-96 bg-blue-400/30 rounded-full blur-[100px]"></div>
+      <div class="absolute bottom-0 left-0 w-96 h-96 bg-indigo-900/50 rounded-full blur-[100px]"></div>
+
+      <div class="relative z-10 max-w-3xl mx-auto">
+        <h2 class="text-5xl font-black text-white mb-6">
+          Take Control of Health Decisions Today
+        </h2>
+        <p class="text-blue-200 mb-12 font-medium">
+          Join the waitlist for Kenko Pro. Early access members get lifetime
+          premium AI features.
+        </p>
+        <div class="flex flex-col sm:flex-row bg-white/10 p-2 rounded-2xl backdrop-blur-lg border border-white/20">
+          <input type="email" placeholder="Enter your email for early access"
+            class="bg-transparent text-white px-6 py-4 outline-none w-full placeholder:text-blue-200" />
+          <button
+            class="bg-white text-blue-700 px-8 py-4 rounded-xl font-black shadow-xl hover:scale-105 transition-transform whitespace-nowrap mt-2 sm:mt-0">
+            Get Access →
+          </button>
+        </div>
+        <div class="flex justify-center space-x-6 mt-8 text-sm font-bold text-blue-200">
+          <span>🛡️ HIPAA Compliant</span>
+          <span>⚡ AI-Powered</span>
+          <span>👤 Patient-First</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== CONSULTANCY PAGE SECTION ========== -->
+    <section id="consultancySection" class="py-24 px-8 bg-white dark:bg-[#050B1A]">
+      <div class="max-w-[1200px] mx-auto">
+        <div class="text-center mb-16 scroll-reveal">
+          <h2 class="text-sm font-black text-blue-600 tracking-[0.2em] uppercase mb-4">Expert Care</h2>
+          <h3 class="text-4xl font-black text-[#0B1528] dark:text-white mb-4">Consultancy</h3>
+          <p class="text-slate-500 font-medium max-w-2xl mx-auto">Book instant consultations with verified specialists.
+            Video call, chat, or schedule appointments.</p>
+        </div>
+
+        <!-- Doctors Nearby Hovering Card -->
+        <div class="relative mb-16 scroll-reveal group">
+          <div class="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-[2.5rem] p-8 lg:p-12 text-white overflow-hidden relative shadow-2xl transition-transform duration-500 group-hover:scale-[1.01]">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-32 -mt-32 animate-pulse"></div>
+            <div class="relative z-10 grid lg:grid-cols-2 gap-8 items-center">
+              <div>
+                <div class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-4 py-2 rounded-full border border-white/30 mb-6">
+                  <span class="w-2 h-2 rounded-full bg-green-400 animate-ping"></span>
+                  <span class="text-xs font-bold uppercase tracking-widest">Live: Finding Doctors Nearby</span>
+                </div>
+                <h2 class="text-3xl lg:text-4xl font-black mb-4">Doctors Nearby Me</h2>
+                <p class="text-blue-100 text-lg mb-8 leading-relaxed">
+                  Our intelligence engine is scanning for available practitioners in your current vicinity. 
+                  Connect instantly to the nearest care center based on your health urgency.
+                </p>
+                <div class="flex flex-wrap gap-4">
+                  <div class="bg-white/10 backdrop-blur-sm p-4 rounded-2xl border border-white/10 flex-1 min-w-[150px]">
+                    <p class="text-xs font-bold text-blue-200 uppercase mb-1">Clinic Center</p>
+                    <p class="font-black">City Health Hub</p>
+                    <p class="text-[10px] text-blue-300">0.8 km away · Open Now</p>
+                  </div>
+                  <div class="bg-white/10 backdrop-blur-sm p-4 rounded-2xl border border-white/10 flex-1 min-w-[150px]">
+                    <p class="text-xs font-bold text-blue-200 uppercase mb-1">Emergency Care</p>
+                    <p class="font-black">St. Jude Medical</p>
+                    <p class="text-[10px] text-blue-300">1.2 km away · 24/7</p>
+                  </div>
+                </div>
+              </div>
+              <div class="relative h-64 lg:h-full min-h-[300px] flex items-center justify-center">
+                <!-- Simulating a map/radar view -->
+                <div class="relative w-64 h-64">
+                   <div class="absolute inset-0 border-4 border-white/20 rounded-full animate-ping-slow"></div>
+                   <div class="absolute inset-4 border-4 border-white/15 rounded-full animate-ping-slow" style="animation-delay: 1s"></div>
+                   <div class="absolute inset-8 border-4 border-white/10 rounded-full animate-ping-slow" style="animation-delay: 2s"></div>
+                   
+                   <!-- Radar Sweep -->
+                   <div class="absolute inset-0 rounded-full animate-radar overflow-hidden pointer-events-none">
+                      <div class="absolute top-0 left-1/2 w-1/2 h-1/2 bg-gradient-to-tr from-white/20 to-transparent origin-bottom-left"></div>
+                   </div>
+
+                   <div class="absolute inset-0 flex items-center justify-center">
+                      <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center text-blue-600 text-2xl shadow-xl z-20">
+                        📍
+                      </div>
+                      <div class="absolute top-10 left-10 w-8 h-8 bg-green-400 rounded-full border-4 border-white shadow-lg animate-bounce-slow"></div>
+                      <div class="absolute bottom-10 right-10 w-8 h-8 bg-blue-400 rounded-full border-4 border-white shadow-lg animate-bounce-slow" style="animation-delay: 0.5s"></div>
+                   </div>
+                </div>
+              </div>
+            </div>
+            <div class="absolute bottom-0 right-0 p-8">
+               <button class="bg-white text-blue-700 font-black px-8 py-3 rounded-xl hover:bg-blue-50 transition-colors shadow-lg shadow-white/10">View Local Map →</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 scroll-reveal">
+          <!-- Doctor Card 1 -->
+          <div class="consult-page-card">
+            <div class="consult-page-avatar" style="background: linear-gradient(135deg, #3b82f6, #6366f1);">AS</div>
+            <h4 class="font-black text-lg mt-4">Dr. Aditi Sharma</h4>
+            <p class="text-sm text-slate-500 dark:text-slate-400">General Physician</p>
+            <div class="flex items-center justify-center gap-2 mt-2 text-xs text-slate-400">
+              <span>⭐ 4.9</span><span>·</span><span>500+ consults</span>
+            </div>
+            <span class="consult-page-status online">● Available</span>
+            <button class="consult-page-book">Book Now</button>
+          </div>
+          <!-- Doctor Card 2 -->
+          <div class="consult-page-card">
+            <div class="consult-page-avatar" style="background: linear-gradient(135deg, #ef4444, #f97316);">RM</div>
+            <h4 class="font-black text-lg mt-4">Dr. Rahul Mehra</h4>
+            <p class="text-sm text-slate-500 dark:text-slate-400">Pulmonologist</p>
+            <div class="flex items-center justify-center gap-2 mt-2 text-xs text-slate-400">
+              <span>⭐ 4.8</span><span>·</span><span>320+ consults</span>
+            </div>
+            <span class="consult-page-status online">● Available</span>
+            <button class="consult-page-book">Book Now</button>
+          </div>
+          <!-- Doctor Card 3 -->
+          <div class="consult-page-card">
+            <div class="consult-page-avatar" style="background: linear-gradient(135deg, #10b981, #14b8a6);">PK</div>
+            <h4 class="font-black text-lg mt-4">Dr. Priya Kapoor</h4>
+            <p class="text-sm text-slate-500 dark:text-slate-400">Cardiologist</p>
+            <div class="flex items-center justify-center gap-2 mt-2 text-xs text-slate-400">
+              <span>⭐ 4.9</span><span>·</span><span>700+ consults</span>
+            </div>
+            <span class="consult-page-status busy">● Busy</span>
+            <button class="consult-page-book">Book Now</button>
+          </div>
+          <!-- Doctor Card 4 -->
+          <div class="consult-page-card">
+            <div class="consult-page-avatar" style="background: linear-gradient(135deg, #8b5cf6, #a855f7);">VR</div>
+            <h4 class="font-black text-lg mt-4">Dr. Vikram Rao</h4>
+            <p class="text-sm text-slate-500 dark:text-slate-400">Neurologist</p>
+            <div class="flex items-center justify-center gap-2 mt-2 text-xs text-slate-400">
+              <span>⭐ 4.7</span><span>·</span><span>280+ consults</span>
+            </div>
+            <span class="consult-page-status offline">● Offline</span>
+            <button class="consult-page-book" disabled>Unavailable</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== REPORTS & ANALYSIS ========== -->
+    <section class="py-24 px-8 bg-slate-50 dark:bg-[#080E1C]">
+      <div
+        class="max-w-[1200px] mx-auto rounded-3xl shadow-xl border border-blue-100 dark:border-slate-800 p-10 mb-16 scroll-reveal">
+        <h2 class="text-3xl font-black text-blue-700 dark:text-blue-400 mb-6">Reports & Analysis</h2>
+        <form id="reportForm" class="flex flex-col md:flex-row gap-4 mb-8">
+          <input type="text" id="reportTitle" placeholder="Report Title"
+            class="px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-white font-bold flex-1"
+            required />
+          <input type="text" id="reportData" placeholder="Report Data (e.g. BP: 120/80)"
+            class="px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-white font-bold flex-1"
+            required />
+          <button type="submit"
+            class="bg-blue-600 text-white px-6 py-3 rounded-xl font-bold hover:scale-105 transition-transform">Add
+            Report</button>
+        </form>
+        <div id="reportsList" class="space-y-4">
+          <!-- Reports will appear here -->
+        </div>
+      </div>
+      <div
+        class="max-w-[1200px] mx-auto rounded-3xl shadow-xl border border-blue-100 dark:border-slate-800 p-10 scroll-reveal">
+        <h3 class="text-2xl font-black text-blue-700 dark:text-blue-400 mb-4">Analysis</h3>
+        <div id="analysisSection" class="text-slate-700 dark:text-slate-200">No reports yet.</div>
+      </div>
+    </section>
+
+    <!-- ========== FOOTER ========== -->
+    <footer class="bg-white dark:bg-[#050B1A] pt-24 pb-12 px-8 border-t dark:border-slate-900">
+      <div class="max-w-[1200px] mx-auto grid grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+        <div class="col-span-2 lg:col-span-1 space-y-4">
+          <div class="flex items-center space-x-2 mb-6">
+            <div class="w-8 h-8 border-2 border-blue-600 rounded-lg flex items-center justify-center">
+              <span class="text-blue-600 font-bold text-sm">+</span>
+            </div>
+            <span class="text-xl font-black text-[#1E3A8A] dark:text-blue-400 tracking-tighter">Kenko AI</span>
+          </div>
+          <p class="text-slate-500 dark:text-slate-400 text-sm font-medium pr-4">
+            Empowering Early Health Decisions with world-class medical
+            intelligence.
+          </p>
+        </div>
+        <div>
+          <h4 class="font-black text-slate-800 dark:text-slate-200 text-xs uppercase tracking-widest mb-6">
+            Product
+          </h4>
+          <ul class="space-y-3 text-slate-500 dark:text-slate-400 text-sm font-bold">
+            <li>
+              <a href="#" class="hover:text-blue-600 transition">Diagnosis</a>
+            </li>
+            <li>
+              <a href="#" class="hover:text-blue-600 transition">Emergency Mode</a>
+            </li>
+            <li>
+              <a href="#" class="hover:text-blue-600 transition">Health Insights</a>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-black text-slate-800 dark:text-slate-200 text-xs uppercase tracking-widest mb-6">
+            Company
+          </h4>
+          <ul class="space-y-3 text-slate-500 dark:text-slate-400 text-sm font-bold">
+            <li>
+              <a href="#" class="hover:text-blue-600 transition">About</a>
+            </li>
+            <li>
+              <a href="#" class="hover:text-blue-600 transition">Privacy Policy</a>
+            </li>
+            <li>
+              <a href="#" class="hover:text-blue-600 transition">Terms</a>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-black text-slate-800 dark:text-slate-200 text-xs uppercase tracking-widest mb-6">
+            Contact
+          </h4>
+          <p class="text-blue-600 font-bold text-sm hover:underline cursor-pointer">
+            kenkohealth@gmail.com
+          </p>
+        </div>
+      </div>
+      <div class="text-center pt-8 border-t border-slate-100 dark:border-slate-800">
+        <p class="text-[10px] text-slate-400 font-black uppercase tracking-[0.2em]">
+          © 2026 Kenko AI — All rights reserved. Built for better healthcare.
+        </p>
+      </div>
+    </footer>
+
+  </div><!-- /mainContent -->
+
+  <!-- Botpress Chatbot -->
+  <script src="https://cdn.botpress.cloud/webchat/v3.6/inject.js"></script>
+  <script src="https://files.bpcontent.cloud/2026/03/16/16/20260316164228-X4HS505R.js" defer></script>
+
+  <script src="script.js"></script>
+</body>
+
+</html>

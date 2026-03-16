@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kenko AI | Contact Us</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script>tailwind.config = { darkMode: "class" };</script>
+</head>
+<body class="bg-white dark:bg-[#050B1A] transition-colors duration-500 overflow-x-hidden text-slate-800 dark:text-slate-200">
+  <div id="scroll-progress" class="fixed top-0 left-0 h-1 bg-gradient-to-r from-blue-600 to-indigo-400 z-[300] w-0 transition-all duration-100"></div>
+  <nav class="fixed top-0 w-full z-[100] bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl px-8 py-4 border-b border-slate-100 dark:border-slate-800">
+    <div class="max-w-[1400px] mx-auto flex justify-between items-center">
+      <div class="flex items-center space-x-2">
+        <div class="w-9 h-9 border-2 border-blue-600 rounded-lg flex items-center justify-center"><span class="text-blue-600 font-bold">+</span></div>
+        <span class="text-2xl font-extrabold text-[#1E3A8A] dark:text-blue-400 tracking-tighter">Kenko AI</span>
+      </div>
+      <div class="hidden lg:flex items-center space-x-2">
+        <button id="darkModeToggle" class="nav-btn p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-yellow-400">🌙</button>
+        <a href="index.html" class="nav-pill">Home</a>
+        <a href="consultancy.html" class="nav-pill">Consultancy</a>
+        <a href="scanner.html" class="nav-pill">Scanner</a>
+        <a href="vault.html" class="nav-pill">Vault</a>
+        <a href="dicom.html" class="nav-pill">DICOM</a>
+        <a href="about.html" class="nav-pill">About Us</a>
+        <a href="contact.html" class="nav-pill active-pill">Contact Us</a>
+      </div>
+      <button id="burgerBtn" class="lg:hidden flex flex-col items-center justify-center w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 space-y-1.5 burger-btn"><span class="burger-line"></span><span class="burger-line"></span><span class="burger-line"></span></button>
+    </div>
+  </nav>
+
+  <!-- ========== BURGER / MOBILE MENU PANEL ========== -->
+  <div id="burgerMenu" class="burger-menu">
+    <div class="burger-content">
+      <div class="flex justify-between items-center mb-8">
+        <span class="text-xl font-extrabold text-[#1E3A8A] dark:text-blue-400">Menu</span>
+        <button id="burgerClose" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-lg font-bold">✕</button>
+      </div>
+      <div class="burger-nav-links">
+        <a href="index.html" class="burger-link">🏠 Home</a>
+        <a href="consultancy.html" class="burger-link">🩺 Consultancy</a>
+        <a href="scanner.html" class="burger-link">📸 Scanner</a>
+        <a href="vault.html" class="burger-link">🔒 Vault</a>
+        <a href="dicom.html" class="burger-link">📡 DICOM</a>
+        <a href="about.html" class="burger-link">ℹ️ About Us</a>
+        <a href="contact.html" class="burger-link active">📬 Contact Us</a>
+      </div>
+      <button id="darkModeToggleMobile" class="burger-dark-toggle"><span>🌙</span><span>Toggle Dark Mode</span></button>
+
+      <!-- ====== CONSULTANCY SECTION IN BURGER ====== -->
+      <div class="burger-section-divider"></div>
+      <h3 class="burger-section-title">
+        <span class="burger-section-icon">🩺</span>
+        Consultancy
+      </h3>
+
+      <!-- Quick Book -->
+      <div class="consult-quick-book">
+        <p class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-3">Quick Book a Session</p>
+        <div class="consult-specialties">
+          <button class="consult-specialty-chip" data-spec="general">🩻 General</button>
+          <button class="consult-specialty-chip" data-spec="cardio">❤️ Cardiology</button>
+          <button class="consult-specialty-chip" data-spec="pulmo">🫁 Pulmonology</button>
+          <button class="consult-specialty-chip" data-spec="neuro">🧠 Neurology</button>
+          <button class="consult-specialty-chip" data-spec="ortho">🦴 Orthopedics</button>
+          <button class="consult-specialty-chip" data-spec="derma">🧴 Dermatology</button>
+        </div>
+      </div>
+
+      <!-- Doctor Cards -->
+      <div class="consult-doctors">
+        <div class="consult-doctor-card">
+          <div class="consult-doctor-header">
+            <div class="consult-avatar" style="background: linear-gradient(135deg, #3b82f6, #6366f1);">AS</div>
+            <div class="consult-doctor-info"><h4>Dr. Aditi Sharma</h4><p>General Physician</p></div>
+            <span class="consult-status online">● Online</span>
+          </div>
+          <div class="consult-doctor-meta"><span>⭐ 4.9</span><span>💰 ₹300</span></div>
+          <div class="consult-doctor-actions">
+            <button class="consult-btn-video">📹 Video Call</button>
+            <button class="consult-btn-chat">💬 Chat</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="burgerOverlay" class="burger-overlay"></div>
+
+  <!-- HERO -->
+  <section class="pt-32 pb-16 px-8">
+    <div class="max-w-[1000px] mx-auto text-center">
+      <div class="page-hero-badge">📬 Get in Touch</div>
+      <h1 class="text-4xl lg:text-5xl font-black text-[#0B1528] dark:text-white mb-4">We'd Love to <span class="text-blue-600">Hear From You</span></h1>
+      <p class="text-slate-500 dark:text-slate-400 max-w-xl mx-auto">Whether you have questions, feedback, or partnership inquiries — our team is here to help.</p>
+    </div>
+  </section>
+
+  <!-- CONTACT FORM + INFO -->
+  <section class="py-8 px-8">
+    <div class="max-w-[1100px] mx-auto grid lg:grid-cols-5 gap-8">
+      <!-- FORM -->
+      <div class="lg:col-span-3 bg-slate-50 dark:bg-[#080E1C] rounded-[2rem] border border-slate-200 dark:border-slate-800 p-8">
+        <h2 class="text-2xl font-black text-[#0B1528] dark:text-white mb-6">Send a Message</h2>
+        <form id="contactForm" class="space-y-4">
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div class="login-field"><label>First Name</label><input type="text" placeholder="John" required /></div>
+            <div class="login-field"><label>Last Name</label><input type="text" placeholder="Doe" required /></div>
+          </div>
+          <div class="login-field"><label>Email</label><input type="email" placeholder="john@example.com" required /></div>
+          <div class="login-field"><label>Subject</label>
+            <select class="px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 font-semibold text-sm" required>
+              <option value="">Select a topic…</option>
+              <option>General Inquiry</option>
+              <option>Consultancy Question</option>
+              <option>Technical Support</option>
+              <option>Partnership / Business</option>
+              <option>Careers</option>
+              <option>Bug Report</option>
+            </select>
+          </div>
+          <div class="login-field"><label>Message</label><textarea rows="4" placeholder="Tell us how we can help…" class="px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 font-semibold text-sm resize-none w-full" required></textarea></div>
+          <button type="submit" class="login-submit w-full">Send Message →</button>
+        </form>
+        <p id="contactSuccess" class="hidden text-green-600 font-bold text-sm text-center mt-4">✅ Message sent! We'll get back to you within 24 hours.</p>
+      </div>
+
+      <!-- INFO -->
+      <div class="lg:col-span-2 space-y-6">
+        <div class="page-card">
+          <div class="text-2xl mb-3">📧</div>
+          <h3 class="font-black mb-1">Email Us</h3>
+          <p class="text-sm text-blue-600 font-bold">kenkohealth@gmail.com</p>
+          <p class="text-xs text-slate-500 mt-1">We respond within 24 hours</p>
+        </div>
+        <div class="page-card">
+          <div class="text-2xl mb-3">📞</div>
+          <h3 class="font-black mb-1">Call Us</h3>
+          <p class="text-sm font-bold">+1 618 360 7978</p>
+          <p class="text-xs text-slate-500 mt-1">Mon–Fri, 9am–6pm IST</p>
+        </div>
+        <div class="page-card">
+          <div class="text-2xl mb-3">📍</div>
+          <h3 class="font-black mb-1">Visit Us</h3>
+          <p class="text-sm font-bold">Kenko AI Health Tech</p>
+          <p class="text-xs text-slate-500 mt-1">Bangalore, Karnataka, India</p>
+        </div>
+        <div class="page-card">
+          <div class="text-2xl mb-3">💬</div>
+          <h3 class="font-black mb-1">Live Chat</h3>
+          <p class="text-sm text-slate-500">Use the chat button at the bottom-right for instant AI-assisted support.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="py-16 px-8">
+    <div class="max-w-[800px] mx-auto">
+      <h2 class="text-2xl font-black text-center text-[#0B1528] dark:text-white mb-8">Frequently Asked <span class="text-blue-600">Questions</span></h2>
+      <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-question"><span>How quickly do you respond?</span><span class="faq-chevron">▼</span></div>
+        <div class="faq-answer">We aim to respond to all inquiries within 24 hours. For urgent medical concerns, please use our 24/7 chat support or emergency hotline.</div>
+      </div>
+      <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-question"><span>Do you offer partnerships with hospitals?</span><span class="faq-chevron">▼</span></div>
+        <div class="faq-answer">Yes! We partner with hospitals and clinics for DICOM integration, patient records management, and telehealth infrastructure. Select "Partnership / Business" in the contact form above.</div>
+      </div>
+      <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-question"><span>Is there a free trial?</span><span class="faq-chevron">▼</span></div>
+        <div class="faq-answer">Kenko AI's basic features including the health vault, AI scanner, and symptom checker are free forever. Premium features like specialist consultations and advanced AI analysis are available with Kenko Care subscription.</div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="bg-[#0B1528] py-12 px-8 text-white">
+    <div class="max-w-[1200px] mx-auto grid grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+      <div><span class="text-xl font-black">Kenko</span><p class="text-slate-400 text-xs mt-2">AI-powered digital health vault for the future of healthcare.</p></div>
+      <div><h4 class="font-bold text-xs uppercase tracking-wider mb-3 text-slate-400">Product</h4><ul class="space-y-2 text-sm"><li><a href="consultancy.html" class="text-slate-300 hover:text-blue-400">Consultancy</a></li><li><a href="scanner.html" class="text-slate-300 hover:text-blue-400">Scanner</a></li><li><a href="dicom.html" class="text-slate-300 hover:text-blue-400">DICOM</a></li></ul></div>
+      <div><h4 class="font-bold text-xs uppercase tracking-wider mb-3 text-slate-400">Company</h4><ul class="space-y-2 text-sm"><li><a href="about.html" class="text-slate-300 hover:text-blue-400">About</a></li><li><a href="contact.html" class="text-slate-300 hover:text-blue-400">Contact</a></li></ul></div>
+      <div><h4 class="font-bold text-xs uppercase tracking-wider mb-3 text-slate-400">Legal</h4><ul class="space-y-2 text-sm"><li><a href="#" class="text-slate-300 hover:text-blue-400">Privacy</a></li><li><a href="#" class="text-slate-300 hover:text-blue-400">Terms</a></li></ul></div>
+    </div>
+    <div class="text-center pt-6 border-t border-slate-800"><p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">© 2026 Kenko AI — All rights reserved.</p></div>
+  </footer>
+  <script src="script.js"></script>
+  <script>
+    const contactForm = document.getElementById('contactForm');
+    const contactSuccess = document.getElementById('contactSuccess');
+    if (contactForm) {
+      contactForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        contactForm.reset();
+        contactSuccess.classList.remove('hidden');
+        setTimeout(() => contactSuccess.classList.add('hidden'), 5000);
+      });
+    }
+  </script>
+</body>
+</html>

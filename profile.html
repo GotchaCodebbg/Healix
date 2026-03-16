@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en" class="light">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kenko AI | User Profile</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script>
+    tailwind.config = { darkMode: "class" };
+  </script>
+</head>
+
+<body
+  class="bg-white dark:bg-[#050B1A] transition-colors duration-500 overflow-x-hidden text-slate-800 dark:text-slate-200">
+  
+  <nav
+    class="fixed top-0 w-full z-[100] bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl px-8 py-4 border-b border-slate-100 dark:border-slate-800">
+    <div class="max-w-[1400px] mx-auto flex justify-between items-center">
+      <div class="flex items-center space-x-2">
+        <div class="w-9 h-9 border-2 border-blue-600 rounded-lg flex items-center justify-center">
+          <span class="text-blue-600 font-bold">+</span>
+        </div>
+        <span class="text-2xl font-extrabold text-[#1E3A8A] dark:text-blue-400 tracking-tighter">Kenko AI</span>
+      </div>
+      <div class="hidden lg:flex items-center space-x-2">
+        <button id="darkModeToggle"
+          class="nav-btn p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-yellow-400">
+          🌙
+        </button>
+        <a href="index.html" class="nav-pill">Home</a>
+        <a href="consultancy.html" class="nav-pill">Consultancy</a>
+        <a href="scanner.html" class="nav-pill">Scanner</a>
+        <a href="vault.html" class="nav-pill">Vault</a>
+        <a href="dicom.html" class="nav-pill">DICOM</a>
+        <a href="about.html" class="nav-pill">About Us</a>
+        <a href="contact.html" class="nav-pill">Contact Us</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="pt-32 pb-24 px-8">
+    <div class="max-w-[1000px] mx-auto">
+      <div class="mb-12">
+        <h1 class="text-4xl font-black text-[#0B1528] dark:text-white mb-2">User Profile Setup</h1>
+        <p class="text-slate-500 dark:text-slate-400">Manage your personal information and application preferences.</p>
+      </div>
+
+      <div class="grid lg:grid-cols-3 gap-8">
+        <!-- Sidebar -->
+        <div class="space-y-4">
+          <div class="glass-card p-6 flex flex-col items-center">
+            <div class="w-24 h-24 bg-blue-100 dark:bg-slate-800 rounded-full flex items-center justify-center text-5xl mb-4">
+              👤
+            </div>
+            <h3 class="font-black text-xl text-slate-800 dark:text-white">Admin User</h3>
+            <p class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-widest mt-1">Premium Member</p>
+            <button class="mt-6 w-full py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-sm font-bold hover:bg-slate-50 dark:hover:bg-slate-800 transition-all">Change Photo</button>
+          </div>
+          
+          <div class="glass-card p-4 space-y-1">
+            <button class="w-full text-left px-4 py-3 rounded-xl bg-blue-600 text-white font-bold text-sm">Account Details</button>
+            <button class="w-full text-left px-4 py-3 rounded-xl text-slate-600 dark:text-slate-300 font-bold text-sm hover:bg-slate-50 dark:hover:bg-slate-800 transition-all">Security</button>
+            <button class="w-full text-left px-4 py-3 rounded-xl text-slate-600 dark:text-slate-300 font-bold text-sm hover:bg-slate-50 dark:hover:bg-slate-800 transition-all">Notifications</button>
+            <a href="#account" class="sidebar-item w-full text-left px-4 py-3 rounded-xl bg-blue-600 text-white font-bold text-sm">Account Details</a>
+            <a href="#security" class="sidebar-item w-full text-left px-4 py-3 rounded-xl text-slate-600 dark:text-slate-300 font-bold text-sm hover:bg-slate-50 dark:hover:bg-slate-800 transition-all">Security</a>
+            <a href="#notifications" class="sidebar-item w-full text-left px-4 py-3 rounded-xl text-slate-600 dark:text-slate-300 font-bold text-sm hover:bg-slate-50 dark:hover:bg-slate-800 transition-all">Notifications</a>
+            <a href="#customization" class="sidebar-item w-full text-left px-4 py-3 rounded-xl text-slate-600 dark:text-slate-300 font-bold text-sm hover:bg-slate-50 dark:hover:bg-slate-800 transition-all">Customization</a>
+          </div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="lg:col-span-2 space-y-8">
+          <!-- Account Info -->
+          <div id="accountInfo" class="profile-section glass-card p-8 active-section">
+            <h2 class="text-xl font-black text-slate-800 dark:text-white mb-6 flex items-center gap-2">
+              <span class="text-blue-600">📋</span> Personal Information
+            </h2>
+            <form id="profileForm" class="space-y-6">
+              <div class="grid sm:grid-cols-2 gap-4">
+                <div class="space-y-1.5">
+                  <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Full Name</label>
+                  <input type="text" id="profName" class="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 font-bold text-sm outline-none focus:border-blue-600 transition-all" />
+                </div>
+                <div class="space-y-1.5">
+                  <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Email Address</label>
+                  <input type="email" id="profEmail" class="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 font-bold text-sm outline-none focus:border-blue-600 transition-all" />
+                </div>
+              </div>
+              <div class="grid sm:grid-cols-2 gap-4">
+                <div class="space-y-1.5">
+                  <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Age</label>
+                  <input type="number" id="profAge" class="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 font-bold text-sm outline-none focus:border-blue-600 transition-all" />
+                </div>
+                <div class="space-y-1.5">
+                  <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Sex</label>
+                  <select id="profSex" class="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 font-bold text-sm outline-none focus:border-blue-600 transition-all">
+                    <option value="">Select</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+              </div>
+              <div class="grid sm:grid-cols-2 gap-4">
+                <div class="space-y-1.5">
+                  <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Body Weight (kg)</label>
+                  <input type="number" id="profWeight" step="0.1" class="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 font-bold text-sm outline-none focus:border-blue-600 transition-all" />
+                </div>
+                <div class="space-y-1.5">
+                  <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Height (cm)</label>
+                  <input type="number" id="profHeight" class="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 font-bold text-sm outline-none focus:border-blue-600 transition-all" />
+                </div>
+              </div>
+              <div class="pt-4 border-t dark:border-slate-800">
+                <button type="submit" class="bg-blue-600 text-white px-8 py-3 rounded-xl font-black shadow-lg shadow-blue-500/30 hover:-translate-y-1 transition-all">Save Changes</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Customization -->
+          <div id="customizationSection" class="profile-section glass-card p-8">
+            <h2 class="text-xl font-black text-slate-800 dark:text-white mb-6 flex items-center gap-2">
+              <span class="text-blue-600">🎨</span> Customization Options
+            </h2>
+            <div class="space-y-6">
+              <div class="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl">
+                <div>
+                  <h4 class="font-bold text-sm">Theme Preference</h4>
+                  <p class="text-xs text-slate-500">Switch between light and dark modes.</p>
+                </div>
+                <button id="themeToggleProfile" class="px-6 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 font-bold text-xs hover:bg-slate-100 transition-all">Toggle Mode</button>
+              </div>
+              <div class="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl">
+                <div>
+                  <h4 class="font-bold text-sm">Accent Color</h4>
+                  <p class="text-xs text-slate-500">Choose your primary application color.</p>
+                </div>
+                <div class="flex gap-2" id="accentPicker">
+                  <button data-color="#2563eb" class="w-8 h-8 rounded-full bg-blue-600 border-2 border-transparent transition-all hover:scale-110 active:scale-90"></button>
+                  <button data-color="#4f46e5" class="w-8 h-8 rounded-full bg-indigo-600 border-2 border-transparent transition-all hover:scale-110 active:scale-90"></button>
+                  <button data-color="#10b981" class="w-8 h-8 rounded-full bg-emerald-600 border-2 border-transparent transition-all hover:scale-110 active:scale-90"></button>
+                  <button data-color="#f59e0b" class="w-8 h-8 rounded-full bg-amber-600 border-2 border-transparent transition-all hover:scale-110 active:scale-90"></button>
+                </div>
+              </div>
+              <div class="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl">
+                <div>
+                  <h4 class="font-bold text-sm">Compact View</h4>
+                  <p class="text-xs text-slate-500">Reduce padding and font sizes for high-density data.</p>
+                </div>
+                <div id="compactToggle" class="w-12 h-6 bg-slate-200 dark:bg-slate-700 rounded-full relative cursor-pointer transition-colors">
+                  <div class="toggle-dot absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-all"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="bg-white dark:bg-[#050B1A] py-12 px-8 border-t dark:border-slate-900">
+    <div class="max-w-[1200px] mx-auto text-center">
+      <p class="text-[10px] text-slate-400 font-black uppercase tracking-[0.2em]">
+        © 2026 Kenko AI — All rights reserved.
+      </p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <style>
+    .profile-section { display: none; }
+    .profile-section.active-section { display: block; }
+    .sidebar-item.active { background: #eff6ff; color: #2563eb; border-left: 4px solid #2563eb; }
+    .dark .sidebar-item.active { background: rgba(37,99,235,0.1); color: #60a5fa; border-left-color: #3b82f6; }
+  </style>
+  <script>
+    // Tab switching logic
+    document.querySelectorAll('.sidebar-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+            e.preventDefault();
+            const target = item.getAttribute('href').replace('#', '');
+            if (!target) return;
+
+            document.querySelectorAll('.profile-section').forEach(s => s.classList.remove('active-section'));
+            document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+
+            if (target === 'account') {
+                document.getElementById('accountInfo').classList.add('active-section');
+                item.classList.add('active');
+            } else if (target === 'customization') {
+                document.getElementById('customizationSection').classList.add('active-section');
+                item.classList.add('active');
+            }
+        });
+    });
+
+    // Handle initial hash
+    if (window.location.hash === '#customization') {
+        const item = document.querySelector('a[href="#customization"]');
+        if (item) item.click();
+    }
+    // Profile specific logic
+    document.getElementById('themeToggleProfile')?.addEventListener('click', toggleDarkMode);
+
+    const profileForm = document.getElementById('profileForm');
+    const fields = ['profName', 'profEmail', 'profAge', 'profSex', 'profWeight', 'profHeight'];
+
+    function loadProfile() {
+      const saved = JSON.parse(localStorage.getItem('kenko_profile') || '{}');
+      fields.forEach(f => {
+        const el = document.getElementById(f);
+        if (el) el.value = saved[f] || '';
+      });
+      // Update sidebar name
+      const sidebarName = document.querySelector('.glass-card h3');
+      if (sidebarName && saved.profName) sidebarName.innerText = saved.profName;
+    }
+
+    if (profileForm) {
+      profileForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const profileData = {};
+        fields.forEach(f => {
+          profileData[f] = document.getElementById(f).value;
+        });
+        localStorage.setItem('kenko_profile', JSON.stringify(profileData));
+        alert('Profile saved successfully!');
+        loadProfile();
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadProfile();
+      loadCustomization();
+    });
+
+    // Customization Logic
+    const accentPicker = document.getElementById('accentPicker');
+    const compactToggle = document.getElementById('compactToggle');
+
+    function loadCustomization() {
+      const saved = JSON.parse(localStorage.getItem('kenko_customization') || '{}');
+      if (saved.accentColor) {
+        document.querySelectorAll('#accentPicker button').forEach(btn => {
+          if (btn.dataset.color === saved.accentColor) btn.classList.add('ring-2', 'ring-offset-2', 'ring-blue-500');
+          else btn.classList.remove('ring-2', 'ring-offset-2', 'ring-blue-500');
+        });
+      }
+      if (saved.compactView === 'true') {
+        compactToggle.classList.add('bg-blue-600');
+        compactToggle.querySelector('.toggle-dot').style.left = '1.5rem';
+      } else {
+        compactToggle.classList.remove('bg-blue-600');
+        compactToggle.querySelector('.toggle-dot').style.left = '0.25rem';
+      }
+    }
+
+    accentPicker?.addEventListener('click', (e) => {
+      if (e.target.dataset.color) {
+        const customization = JSON.parse(localStorage.getItem('kenko_customization') || '{}');
+        customization.accentColor = e.target.dataset.color;
+        localStorage.setItem('kenko_customization', JSON.stringify(customization));
+        loadCustomization();
+        // Trigger style update
+        window.location.reload(); 
+      }
+    });
+
+    compactToggle?.addEventListener('click', () => {
+      const customization = JSON.parse(localStorage.getItem('kenko_customization') || '{}');
+      customization.compactView = customization.compactView === 'true' ? 'false' : 'true';
+      localStorage.setItem('kenko_customization', JSON.stringify(customization));
+      loadCustomization();
+      // Apply class immediately for visual feedback
+      if (customization.compactView === 'true') document.body.classList.add('compact-view');
+      else document.body.classList.remove('compact-view');
+    });
+  </script>
+  <!-- Botpress Chatbot -->
+  <script src="https://cdn.botpress.cloud/webchat/v3.6/inject.js"></script>
+  <script src="https://files.bpcontent.cloud/2026/03/16/16/20260316164228-X4HS505R.js" defer></script>
+</body>
+
+</html>
